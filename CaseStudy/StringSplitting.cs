@@ -12,7 +12,7 @@ namespace CaseStudy
             if (s == null) return null;
 
             // split c [] = []
-            if (s.Length == 0) return EmptyEnumerableOfString;
+            if (s.Length == 0) return Enumerable.Repeat(string.Empty, 1);
 
             // split c xs = xs' : if null xs'' then [] else split c (tail xs'')
             //     where xs' = takeWhile (/=c) xs
