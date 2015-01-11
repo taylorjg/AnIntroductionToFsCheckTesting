@@ -5,6 +5,7 @@ using FsCheck.Fluent;
 using CaseStudy;
 using FsCheckUtils;
 using System;
+using Microsoft.FSharp.Core;
 
 namespace PropertyTestsCs
 {
@@ -12,7 +13,7 @@ namespace PropertyTestsCs
 
     internal class PropertyTests
     {
-        private static readonly Config MyConfig = Config.VerboseThrowOnFailure;
+        private static readonly Config MyConfig = Config.QuickThrowOnFailure;
         private static readonly Configuration MyConfiguration = MyConfig.ToConfiguration();
 
         private static readonly Func<char, string, bool> PropJoinSplit =
@@ -39,6 +40,17 @@ namespace PropertyTestsCs
                 .ForAny(PropJoinSplit)
                 .Collect(Collect)
                 .Check(MyConfiguration);
+        }
+
+        private static readonly Func<string, Gen<Rose<Result>>> PropJoinSplitTick =
+            xs => Prop.forAll(Arb.fromGen(Gen.elements(xs)), FSharpFunc<char, bool>.FromConverter(c => PropJoinSplit(c, xs)));
+
+        [Property]
+        public void JoinOfSplitGivesOriginalStringWhereSepCharIsTakenFromNonEmptyString()
+        {
+            var arb = Arb.Default.NonEmptyString();
+            var body = FSharpFunc<NonEmptyString, Gen<Rose<Result>>>.FromConverter(nes => PropJoinSplitTick(nes.Get));
+            Check.One(MyConfig, Prop.forAll(arb, body));
         }
     }
 }
