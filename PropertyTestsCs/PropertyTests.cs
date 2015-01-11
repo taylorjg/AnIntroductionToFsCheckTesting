@@ -1,4 +1,5 @@
-﻿using FsCheck;
+﻿using System.Linq;
+using FsCheck;
 using FsCheck.NUnit;
 using FsCheck.Fluent;
 using CaseStudy;
@@ -22,6 +23,21 @@ namespace PropertyTestsCs
         {
             Spec
                 .ForAny(PropJoinSplit)
+                .Check(MyConfiguration);
+        }
+
+        private static readonly Func<char, string, string> Collect = (c, xs) =>
+        {
+            var ys = SS.Split(c, xs);
+            return ys == null ? "(null)" : Convert.ToString(ys.Count());
+        };
+
+        [Property]
+        public void JoinOfSplitGivesOriginalStringWithCollect()
+        {
+            Spec
+                .ForAny(PropJoinSplit)
+                .Collect(Collect)
                 .Check(MyConfiguration);
         }
     }
