@@ -30,7 +30,7 @@ let ``Join of Split gives original string - with collect``() =
     Check.One(myConfig, prop_join_split_collect)
 
 let prop_join_split' xs =
-    forAll (Arb.fromGen (elements xs)) prop_join_split
+    forAll (Arb.fromGen (elements xs)) (fun c -> prop_join_split c xs)
 
 [<Property>]
 let ``Join of Split gives original string - where sep char is taken from non empty string``() =
