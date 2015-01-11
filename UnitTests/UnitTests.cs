@@ -13,5 +13,12 @@ namespace UnitTests
             var actual = StringSplitting.Split(c, s);
             Assert.That(actual, Is.EqualTo(expected));
         }
+
+        [Test]
+        public void SplitGivenCharAndNullString()
+        {
+            var actual = StringSplitting.Split('a', null);
+            Assert.That(actual, Is.Null);
+        }
     }
 }

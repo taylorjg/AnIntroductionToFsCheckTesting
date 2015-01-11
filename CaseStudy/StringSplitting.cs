@@ -8,6 +8,9 @@ namespace CaseStudy
         // split :: Char -> String -> [String]
         public static IEnumerable<string> Split(char c, string s)
         {
+            // Extra null check (can't happen in Haskell).
+            if (s == null) return null;
+
             // split c [] = []
             if (s.Length == 0) return EmptyEnumerableOfString;
 
@@ -22,6 +25,9 @@ namespace CaseStudy
         // join :: Char -> [String] -> String
         public static string Join(char c, IEnumerable<string> xs)
         {
+            // Extra null check (can't happen in Haskell).
+            if (xs == null) return null;
+
             // join c = concat . intersperse [c]
             var separator = new string(c, 1);
             return string.Join(separator, xs);
