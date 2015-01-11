@@ -8,6 +8,8 @@ namespace UnitTests
     {
         [TestCase('@', "pbv@dcc.fc.up.pt", "pbv", "dcc.fc.up.pt")]
         [TestCase('/', "/usr/include", "", "usr", "include")]
+        [TestCase('a', "a", "", "")]
+        [TestCase('a', "xxxa", "xxx", "")]
         public void SplitGivenCharAndNonNullString(char c, string s, params string[] expected)
         {
             var actual = StringSplitting.Split(c, s);
