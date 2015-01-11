@@ -35,4 +35,21 @@ let prop_join_split' xs =
 [<Property>]
 let ``Join of Split gives original string - where sep char is taken from non empty string``() =
     let arb = Arb.Default.NonEmptyString()
-    Check.One(myConfig, Prop.forAll arb (fun nes -> prop_join_split' nes.Get))
+    Check.One(myConfig, forAll arb (fun nes -> prop_join_split' nes.Get))
+
+let arbCharAndNonEmptyStringTuple = Arb.fromGen (gen {
+    let! nes = Arb.Default.NonEmptyString().Generator
+    let xs = nes.Get
+    let! c = Gen.elements xs
+    return (c, xs) })
+
+[<Property>]
+let ``Join of Split gives original string - where sep char is taken from non empty string - with collect``() =
+    let gen = gen {
+        let! nes = Arb.Default.NonEmptyString().Generator
+        let xs = nes.Get
+        let! c = elements xs
+        return (c, xs)
+    }
+    let arb = Arb.fromGen gen
+    Check.One(myConfig, forAll arb (fun tuple -> tuple ||> prop_join_split_collect))

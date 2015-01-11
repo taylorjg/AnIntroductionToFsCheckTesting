@@ -52,5 +52,24 @@ namespace PropertyTestsCs
             var body = FSharpFunc<NonEmptyString, Gen<Rose<Result>>>.FromConverter(nes => PropJoinSplitTick(nes.Get));
             Check.One(MyConfig, Prop.forAll(arb, body));
         }
+
+        private static Func<Tuple<T1, T2>, TResult> Uncurry<T1, T2, TResult>(Func<T1, T2, TResult> f)
+        {
+            return tuple => f(tuple.Item1, tuple.Item2);
+        }
+
+        [Property]
+        public void JoinOfSplitGivesOriginalStringWhereSepCharIsTakenFromNonEmptyStringWithCollect()
+        {
+            var gen = from nes in Arb.Default.NonEmptyString().Generator
+                      let xs = nes.Get
+                      from c in Gen.elements(xs)
+                      select Tuple.Create(c, xs);
+
+            Spec
+                .For(gen, Uncurry(PropJoinSplit))
+                .Collect(Uncurry(Collect))
+                .Check(MyConfiguration);
+        }
     }
 }
