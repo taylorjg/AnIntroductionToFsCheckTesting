@@ -19,6 +19,14 @@ namespace CaseStudy
             return Cons(xs1, (xs2.Length == 0) ? EmptyEnumerableOfString : Split(c, Tail(xs2)));
         }
 
+        // join :: Char -> [String] -> String
+        public static string Join(char c, IEnumerable<string> xs)
+        {
+            // join c = concat . intersperse [c]
+            var separator = new string(c, 1);
+            return string.Join(separator, xs);
+        }
+
         private static IEnumerable<string> EmptyEnumerableOfString
         {
             get { return Enumerable.Empty<string>(); }
