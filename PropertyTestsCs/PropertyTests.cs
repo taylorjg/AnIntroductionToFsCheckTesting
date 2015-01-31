@@ -11,7 +11,8 @@ namespace PropertyTestsCs
 {
     using SS = StringSplitting;
 
-    internal class PropertyTests
+    [NUnit.Framework.TestFixture]
+    public class PropertyTests
     {
         private static readonly Config MyConfig = Config.QuickThrowOnFailure;
         private static readonly Configuration MyConfiguration = MyConfig.ToConfiguration();
