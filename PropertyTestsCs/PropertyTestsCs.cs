@@ -1,18 +1,18 @@
-﻿using System.Linq;
-using FsCheck;
-using FsCheck.NUnit;
-using FsCheck.Fluent;
+﻿using System;
+using System.Linq;
 using CaseStudy;
+using FsCheck;
+using FsCheck.Fluent;
 using FsCheckUtils;
-using System;
 using Microsoft.FSharp.Core;
+using NUnit.Framework;
 
 namespace PropertyTestsCs
 {
     using SS = StringSplitting;
 
-    [NUnit.Framework.TestFixture]
-    public class PropertyTests
+    [TestFixture]
+    public class PropertyTestsCs
     {
         private static readonly Config MyConfig = Config.QuickThrowOnFailure;
         private static readonly Configuration MyConfiguration = MyConfig.ToConfiguration();
@@ -20,7 +20,7 @@ namespace PropertyTestsCs
         private static readonly Func<char, string, bool> PropJoinSplit =
             (c, xs) => SS.Join(c, SS.Split(c, xs)) == xs;
 
-        [Property]
+        [Test]
         public void JoinOfSplitGivesOriginalString()
         {
             Spec
@@ -34,7 +34,7 @@ namespace PropertyTestsCs
             return ys == null ? "(null)" : Convert.ToString(ys.Count());
         };
 
-        [Property]
+        [Test]
         public void JoinOfSplitGivesOriginalStringWithCollect()
         {
             Spec
@@ -46,7 +46,7 @@ namespace PropertyTestsCs
         private static readonly Func<string, Gen<Rose<Result>>> PropJoinSplitTick =
             xs => Prop.forAll(Arb.fromGen(Gen.elements(xs)), FSharpFunc<char, bool>.FromConverter(c => PropJoinSplit(c, xs)));
 
-        [Property]
+        [Test]
         public void JoinOfSplitGivesOriginalStringWhereSepCharIsTakenFromNonEmptyString()
         {
             var arb = Arb.Default.NonEmptyString();
@@ -59,7 +59,7 @@ namespace PropertyTestsCs
             return tuple => f(tuple.Item1, tuple.Item2);
         }
 
-        [Property]
+        [Test]
         public void JoinOfSplitGivesOriginalStringWhereSepCharIsTakenFromNonEmptyStringWithCollect()
         {
             var gen = from nes in Arb.Default.NonEmptyString().Generator

@@ -4,7 +4,7 @@ using NUnit.Framework;
 namespace UnitTests
 {
     [TestFixture]
-    internal class UnitTests
+    public class UnitTests
     {
         [TestCase('@', "pbv@dcc.fc.up.pt", "pbv", "dcc.fc.up.pt")]
         [TestCase('/', "/usr/include", "", "usr", "include")]
